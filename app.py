@@ -12,12 +12,10 @@ import joblib
 # Configurar la página
 st.set_page_config(page_title="Predicción Cognitiva", layout="centered")
 
-# Cargar datos y modelo
 @st.cache_resource
 def cargar_datos_y_modelo():
     df = pd.read_csv("human_cognitive_performance.csv")
 
-    # Codificar y escalar
     df_encoded = df.copy()
     label_encoders = {}
     for col in ['Gender', 'Diet_Type', 'Exercise_Frequency']:
@@ -37,18 +35,17 @@ def cargar_datos_y_modelo():
     X = df_encoded.drop(columns=['Cognitive_Score'])
     y = df_encoded['Cognitive_Score']
 
-    #model_ann = load_model("modelo_cognitivo.keras")
+    # Cargar el modelo SavedModel exportado
+    model_ann = tf.saved_model.load("modelo_cognitivo")
 
-    model_ann = load_model("modelo_cognitivo")
     # Entrenar modelo de regresión
     reg = LinearRegression()
     reg.fit(X, y)
 
     return df, model_ann, reg, scaler, label_encoders, columnas_a_escalar, X.columns.tolist()
 
-# Cargar datos y modelo
+# Cargar todo
 df, model_ann, reg_model, scaler, label_encoders, columnas_a_escalar, input_features = cargar_datos_y_modelo()
-
 # --- Interfaz ---
 st.title("🧠 Predicción de Puntuación Cognitiva")
 st.markdown("Ingresa tus datos para estimar tu puntuación cognitiva.")
@@ -80,7 +77,18 @@ df_user = df_user[input_features]
 
 # Predicciones
 if st.button("Predecir puntuación cognitiva"):
-    pred_ann = model_ann.predict(df_user.values)[0][0]
+    # Convertir entrada a tensor float32
+    input_tensor = tf.constant(df_user.values, dtype=tf.float32)
+
+    # Obtener la función de inferencia
+    infer = model_ann.signatures["serving_default"]
+
+    # Realizar predicción (devuelve un dict de tensores)
+    pred_dict = infer(input_tensor)
+
+    # Extraer la predicción (usualmente es el primer valor del dict)
+    pred_ann = list(pred_dict.values())[0].numpy()[0][0]
+
     pred_reg = reg_model.predict(df_user)[0]
 
     st.subheader("🧾 Resultados de Predicción:")
