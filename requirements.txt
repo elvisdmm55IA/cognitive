@@ -1,10 +1,6 @@
 tensorflow==2.15.0
-streamlit
-pandas
 numpy
 matplotlib
 seaborn
 scikit-learn
-reportlab
-xlsxwriter
-joblib==1.4.2
+streamlit
