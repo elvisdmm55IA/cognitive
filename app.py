@@ -100,12 +100,15 @@ st.write(df_user.values)              # muestra el dataframe completo con datos 
 # Predicciones
 if st.button("Predecir puntuación cognitiva"):
     X_pred = df_user.values.astype(np.float32)
-    st.write("Modelo:", model_ann)
-    st.write("Input a predecir shape:", X_pred.shape)
-    st.write("Input a predecir dtype:", X_pred.dtype)
-    pred_ann = model_ann.predict(X_pred)[0][0]
+    infer = model_ann.signatures["serving_default"]
+    result = infer(tf.constant(X_pred))
+    # Por lo general la salida tiene una clave, que puedes inspeccionar así:
+    st.write("Keys output infer:", result.keys())
+    # Suponiendo que la salida se llame 'output_0' (o algo similar), haz:
+    pred_ann = list(result.values())[0].numpy()[0][0]
     pred_reg = reg_model.predict(df_user)[0]
 
+    
     st.subheader("🧾 Resultados de Predicción:")
     st.write(f"🔹 **Red Neuronal:** {pred_ann:.2f}")
     st.write(f"🔹 **Regresión Lineal:** {pred_reg:.2f}")
