@@ -14,7 +14,7 @@ st.set_page_config(page_title="Predicción Cognitiva", layout="centered")
 
 @st.cache_resource
 def cargar_datos_y_modelo():
-    df = pd.read_csv("human_cognitive_performance.csv")
+    df = pd.read_csv('/content/human_cognitive_performance.csv')
 
     df_encoded = df.copy()
     label_encoders = {}
