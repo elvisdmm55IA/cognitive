@@ -84,10 +84,12 @@ df_user[columnas_a_escalar] = scaler.transform(df_user[columnas_a_escalar])
 df_user = df_user[input_features]
 
 
-
+st.write("hola")
 st.write("Input shape:", df_user.values.shape)
 st.write("Input dtype:", df_user.values.dtype)
 st.write("Input data:", df_user.values)
+
+
 # Predicciones
 if st.button("Predecir puntuación cognitiva"):
     X_pred = df_user.values.astype(np.float32)
