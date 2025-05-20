@@ -100,6 +100,9 @@ st.write(df_user.values)              # muestra el dataframe completo con datos 
 # Predicciones
 if st.button("Predecir puntuación cognitiva"):
     X_pred = df_user.values.astype(np.float32)
+    st.write("Modelo:", model_ann)
+    st.write("Input a predecir shape:", X_pred.shape)
+    st.write("Input a predecir dtype:", X_pred.dtype)
     pred_ann = model_ann.predict(X_pred)[0][0]
     pred_reg = reg_model.predict(df_user)[0]
 
