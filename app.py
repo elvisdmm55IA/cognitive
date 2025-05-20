@@ -40,10 +40,7 @@ def cargar_datos_y_modelo():
     X = df_encoded.drop(columns=['Cognitive_Score'])
     y = df_encoded['Cognitive_Score']
 
-    # Carga el modelo guardado (ajusta nombre de archivo si es necesario)
-    model_ann = load_model("modelo_cognitivo.keras")
-    # Si tu modelo está exportado en carpeta, usa:
-    # model_ann = load_model("modelo_cognitivo")
+    model_ann = load_model("modelo_cognitivo")
 
     # Entrenar modelo de regresión
     reg = LinearRegression()
