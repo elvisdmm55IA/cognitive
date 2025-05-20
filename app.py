@@ -82,9 +82,11 @@ df_user[columnas_a_escalar] = scaler.transform(df_user[columnas_a_escalar])
 
 # Reordenar columnas
 df_user = df_user[input_features]
-st.write("=== DEBUG INPUT ===")
-print("Input shape:", input_features)
-st.write("Input data:", input_features)
+st.write("=== DEBUG INPUT df_user ===")
+st.write(df_user)              # muestra el dataframe completo con datos codificados y escalados
+print("Input shape:", df_user.values.shape)
+print("Input dtype:", df_user.values.dtype)
+print("Input data:", df_user.values)
 
 
 
