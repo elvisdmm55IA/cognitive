@@ -1,9 +1,15 @@
 pip>=25.1.1
-streamlit
-openai
-numpy
-pandas
-scikit_learn
-tensorflow==2.12.0
-keras
-matplotlib
+# Librerías principales
+pandas==2.2.2
+numpy==1.26.4
+matplotlib==3.8.4
+seaborn==0.13.2
+
+# Scikit-learn para ML
+scikit-learn==1.4.2
+
+# TensorFlow para redes neuronales
+tensorflow==2.15.0
+
+# Streamlit si vas a desplegar como app
+streamlit==1.34.0
