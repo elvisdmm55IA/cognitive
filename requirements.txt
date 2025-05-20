@@ -9,6 +9,6 @@ seaborn==0.13.2
 scikit-learn==1.4.2
 
 # TensorFlow para redes neuronales
+streamlit==1.16.0
 tensorflow==2.10.0
-# Streamlit si vas a desplegar como app
-streamlit==1.34.0
+protobuf==3.19.6
