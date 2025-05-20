@@ -82,22 +82,8 @@ df_user[columnas_a_escalar] = scaler.transform(df_user[columnas_a_escalar])
 
 # Reordenar columnas
 df_user = df_user[input_features]
-st.write("=== DEBUG INPUT ===")
-print("Input shape:", df_user.values.shape)
-st.write("Input dtype:", df_user.values.dtype)
-st.write("Input data:", df_user.values)
 
-
-
-
-
-
-
-
-
-
-
-
+st.experimental_rerun("Input dtype:", df_user.values.dtype)
 # Predicciones
 if st.button("Predecir puntuación cognitiva"):
     X_pred = df_user.values.astype(np.float32)
