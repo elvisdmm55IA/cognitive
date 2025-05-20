@@ -13,8 +13,6 @@ import tensorflow as tf
 # Configurar la página
 st.set_page_config(page_title="Predicción Cognitiva", layout="centered")
 
-# Mostrar archivos en directorio para debug
-st.write("Archivos en el directorio actual:", os.listdir())
 
 # Cargar datos y modelo
 @st.cache_resource
