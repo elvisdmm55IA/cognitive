@@ -9,6 +9,7 @@ seaborn==0.13.2
 scikit-learn==1.4.2
 
 # TensorFlow para redes neuronales
-streamlit==1.16.0
 tensorflow==2.10.0
-protobuf==3.19.6
+protobuf==3.19.6  # Compatible con TensorFlow 2.10.0
+streamlit==1.16.0 # Versión anterior que acepta protobuf<3.20
+rich>=10.14.0,<14 # Compatible con streamlit 1.16.0
