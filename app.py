@@ -37,7 +37,7 @@ def cargar_datos_y_modelo():
     X = df_encoded.drop(columns=['Cognitive_Score'])
     y = df_encoded['Cognitive_Score']
 
-    model_ann = load_model("modelo_cognitivo.h5")
+    model_ann = load_model("modelo_cognitivo.keras")
 
     # Entrenar modelo de regresión
     reg = LinearRegression()
