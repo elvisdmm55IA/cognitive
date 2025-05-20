@@ -6,4 +6,4 @@ seaborn
 scikit-learn
 reportlab
 xlsxwriter
-tensorflow
+tensorflow==2.15.0
