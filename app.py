@@ -7,15 +7,20 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
-import joblib
+import os
 
 # Configurar la página
 st.set_page_config(page_title="Predicción Cognitiva", layout="centered")
 
+# Mostrar archivos en directorio para debug
+st.write("Archivos en el directorio actual:", os.listdir())
+
+# Cargar datos y modelo
 @st.cache_resource
 def cargar_datos_y_modelo():
-    df = pd.read_csv('/content/human_cognitive_performance.csv')
+    df = pd.read_csv("human_cognitive_performance.csv")
 
+    # Codificar y escalar
     df_encoded = df.copy()
     label_encoders = {}
     for col in ['Gender', 'Diet_Type', 'Exercise_Frequency']:
@@ -35,8 +40,10 @@ def cargar_datos_y_modelo():
     X = df_encoded.drop(columns=['Cognitive_Score'])
     y = df_encoded['Cognitive_Score']
 
-    # Cargar el modelo SavedModel exportado
-    model_ann = tf.saved_model.load("modelo_cognitivo")
+    # Carga el modelo guardado (ajusta nombre de archivo si es necesario)
+    model_ann = load_model("modelo_cognitivo.keras")
+    # Si tu modelo está exportado en carpeta, usa:
+    # model_ann = load_model("modelo_cognitivo")
 
     # Entrenar modelo de regresión
     reg = LinearRegression()
@@ -44,8 +51,9 @@ def cargar_datos_y_modelo():
 
     return df, model_ann, reg, scaler, label_encoders, columnas_a_escalar, X.columns.tolist()
 
-# Cargar todo
+# Cargar datos y modelo
 df, model_ann, reg_model, scaler, label_encoders, columnas_a_escalar, input_features = cargar_datos_y_modelo()
+
 # --- Interfaz ---
 st.title("🧠 Predicción de Puntuación Cognitiva")
 st.markdown("Ingresa tus datos para estimar tu puntuación cognitiva.")
@@ -66,9 +74,12 @@ user_input['Memory_Test_Score'] = st.slider("Puntaje de test de memoria", 0, 100
 # Convertir entradas
 df_user = pd.DataFrame([user_input])
 
-# Codificar y escalar
+# Antes de codificar, chequea que el valor existe en LabelEncoder para evitar error
 for col, le in label_encoders.items():
-    df_user[col] = le.transform(df_user[col])
+    if df_user[col].iloc[0] not in le.classes_:
+        st.error(f"El valor '{df_user[col].iloc[0]}' no está en las clases del encoder para '{col}'.")
+    else:
+        df_user[col] = le.transform(df_user[col])
 
 df_user[columnas_a_escalar] = scaler.transform(df_user[columnas_a_escalar])
 
@@ -77,18 +88,7 @@ df_user = df_user[input_features]
 
 # Predicciones
 if st.button("Predecir puntuación cognitiva"):
-    # Convertir entrada a tensor float32
-    input_tensor = tf.constant(df_user.values, dtype=tf.float32)
-
-    # Obtener la función de inferencia
-    infer = model_ann.signatures["serving_default"]
-
-    # Realizar predicción (devuelve un dict de tensores)
-    pred_dict = infer(input_tensor)
-
-    # Extraer la predicción (usualmente es el primer valor del dict)
-    pred_ann = list(pred_dict.values())[0].numpy()[0][0]
-
+    pred_ann = model_ann.predict(df_user.values)[0][0]
     pred_reg = reg_model.predict(df_user)[0]
 
     st.subheader("🧾 Resultados de Predicción:")
