@@ -8,6 +8,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 import os
+import tensorflow as tf
 
 # Configurar la página
 st.set_page_config(page_title="Predicción Cognitiva", layout="centered")
@@ -108,7 +109,7 @@ if st.button("Predecir puntuación cognitiva"):
     pred_ann = list(result.values())[0].numpy()[0][0]
     pred_reg = reg_model.predict(df_user)[0]
 
-    
+
     st.subheader("🧾 Resultados de Predicción:")
     st.write(f"🔹 **Red Neuronal:** {pred_ann:.2f}")
     st.write(f"🔹 **Regresión Lineal:** {pred_reg:.2f}")
